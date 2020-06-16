@@ -1,10 +1,7 @@
 from tkinter import *
+import backend
 
 window = Tk()
-
-#functions
-def testing():
-    print('Command working')
 
 #labels
 tl = Label(window, text = 'Title')
@@ -37,22 +34,22 @@ ie = Entry(window, textvariable = ival)
 ie.grid(row = 1, column = 3)
 
 #buttons
-view = Button(window, text = 'View All')
+view = Button(window, text = 'View All', width = 12)
 view.grid(row = 2, column = 3)
 
-search = Button(window, text = 'Search Entry')
+search = Button(window, text = 'Search Entry', width = 12)
 search.grid(row = 3, column = 3)
 
-add = Button(window, text = 'Add Entry')
+add = Button(window, text = 'Add Entry', width = 12)
 add.grid(row = 4, column = 3)
 
-update = Button(window, text = 'Update Selected')
+update = Button(window, text = 'Update Selected', width = 12)
 update.grid(row = 5, column = 3)
 
-delete = Button(window, text = 'Delete Selected')
+delete = Button(window, text = 'Delete Selected', width = 12)
 delete.grid(row = 6, column = 3)
 
-close = Button(window, text = 'Close')
+close = Button(window, text = 'Close', width = 12)
 close.grid(row = 7, column = 3)
 
 #listbox
