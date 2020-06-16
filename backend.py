@@ -45,7 +45,3 @@ def update(id, title, author, year, isbn):
     conn.close()
 
     
-connect()
-print(search(author = 'John Doe'))
-update(1, 'Autobiography', 'Arnav Akula', 2019, 123456789)
-print(view())
