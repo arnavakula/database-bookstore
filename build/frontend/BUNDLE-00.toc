@@ -1,3 +1,0 @@
-([('frontend',
-   '/Users/arnav/Code/python/projects/database-bookstore/dist/frontend',
-   'EXECUTABLE')],)
