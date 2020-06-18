@@ -1,5 +1,7 @@
 from tkinter import *
-import backend
+from backend import Database
+
+database = Database()
 
 window = Tk()
 window.wm_title('Bookstore')
@@ -27,25 +29,25 @@ def get_selected_row(event):
 
 def view_command():
     lb.delete(0, END)
-    for row in backend.view():
+    for row in database.view():
         lb.insert(END, row)
         
 def search_command():
     lb.delete(0, END)
-    for row in backend.search(tval.get(), aval.get(), yval.get(), ival.get()):
+    for row in database.search(tval.get(), aval.get(), yval.get(), ival.get()):
         lb.insert(END, row)
 
 def add_command():
-    backend.add(tval.get(), aval.get(), yval.get(), ival.get()) 
+    database.add(tval.get(), aval.get(), yval.get(), ival.get()) 
     lb.insert(END, (tval.get(), aval.get(), yval.get(), ival.get()))
     refresh()
 
 def update_command():
-    backend.update(selected[0], tval.get(), aval.get(), yval.get(), ival.get())
+    database.update(selected[0], tval.get(), aval.get(), yval.get(), ival.get())
     refresh()
     
 def delete_command():
-    backend.delete(selected[0])
+    database.delete(selected[0])
     lb.delete(0, END)
     te.delete(0, END)
     ye.delete(0, END)
