@@ -3,118 +3,128 @@ from backend import Database
 
 database = Database()
 
-window = Tk()
-window.wm_title('Bookstore')
-
-#functions
-def refresh():
-    lb.delete(0, END)
-    view_command()
-
-def get_selected_row(event): 
-    try:    
-        index = lb.curselection()[0]
-        global selected
-        selected = lb.get(index)
-        te.delete(0, END)
-        te.insert(END, selected[1])
-        ae.delete(0, END)
-        ae.insert(END, selected[2])
-        ye.delete(0, END)
-        ye.insert(END, selected[3])
-        ie.delete(0, END)
-        ie.insert(END, selected[4])
-    except:
-        print('Sorry, you cannot select a book from an empty list. Please select a valid book.\n')
-
-def view_command():
-    lb.delete(0, END)
-    for row in database.view():
-        lb.insert(END, row)
-        
-def search_command():
-    lb.delete(0, END)
-    for row in database.search(tval.get(), aval.get(), yval.get(), ival.get()):
-        lb.insert(END, row)
-
-def add_command():
-    database.add(tval.get(), aval.get(), yval.get(), ival.get()) 
-    lb.insert(END, (tval.get(), aval.get(), yval.get(), ival.get()))
-    refresh()
-
-def update_command():
-    database.update(selected[0], tval.get(), aval.get(), yval.get(), ival.get())
-    refresh()
+class Window:
     
-def delete_command():
-    database.delete(selected[0])
-    lb.delete(0, END)
-    te.delete(0, END)
-    ye.delete(0, END)
-    ae.delete(0, END)
-    ie.delete(0, END)
-    view_command()
+    def __init__(self, window):
+        self.window = window
 
-#labels
-tl = Label(window, text = 'Title')
-tl.grid(row = 0, column = 0)
+        self.window.wm_title('Bookstore')
 
-yl = Label(window, text = 'Year')
-yl.grid(row = 1, column = 0)
+        #labels
+        self.tl = Label(self.window, text = 'Title')
+        self.tl.grid(row = 0, column = 0)
 
-al = Label(window, text = 'Author')
-al.grid(row = 0, column = 2)
+        self.yl = Label(self.window, text = 'Year')
+        self.yl.grid(row = 1, column = 0)
 
-il = Label(window, text = 'ISBN')
-il.grid(row = 1, column = 2)
+        self.al= Label(self.window, text = 'Author')
+        self.al.grid(row = 0, column = 2)
 
-#entries
-tval = StringVar()
-te = Entry(window, textvariable = tval)
-te.grid(row = 0, column = 1)
+        self.il = Label(self.window, text = 'ISBN')
+        self.il.grid(row = 1, column = 2)
 
-yval = StringVar()
-ye = Entry(window, textvariable = yval)
-ye.grid(row = 1, column = 1)
+        #entries
+        self.tval = StringVar()
+        self.te= Entry(self.window, textvariable = self.tval)
+        self.te.grid(row = 0, column = 1)
 
-aval = StringVar()
-ae = Entry(window, textvariable = aval)
-ae.grid(row = 0, column = 3)
+        self.yval = StringVar()
+        self.ye = Entry(self.window, textvariable = self.yval)
+        self.ye.grid(row = 1, column = 1)
 
-ival = StringVar()
-ie = Entry(window, textvariable = ival)
-ie.grid(row = 1, column = 3)
+        self.aval = StringVar()
+        self.ae = Entry(self.window, textvariable = self.aval)
+        self.ae.grid(row = 0, column = 3)
 
-#buttons
-view = Button(window, text = 'View All', width = 12, command = view_command)
-view.grid(row = 2, column = 3)
+        self.ival = StringVar()
+        self.ie = Entry(self.window, textvariable = self.ival)
+        self.ie.grid(row = 1, column = 3)
 
-search = Button(window, text = 'Search Entry', width = 12, command = search_command)
-search.grid(row = 3, column = 3)
+        #buttons
+        view = Button(self.window, text = 'View All', width = 12, command = self.view_command)
+        view.grid(row = 2, column = 3)
 
-add = Button(window, text = 'Add Entry', width = 12, command = add_command)
-add.grid(row = 4, column = 3)
+        search = Button(self.window, text = 'Search Entry', width = 12, command = self.search_command)
+        search.grid(row = 3, column = 3)
 
-update = Button(window, text = 'Update Selected', width = 12, command = update_command)
-update.grid(row = 5, column = 3)
+        add = Button(self.window, text = 'Add Entry', width = 12, command = self.add_command)
+        add.grid(row = 4, column = 3)
 
-delete = Button(window, text = 'Delete Selected', width = 12, command = delete_command)
-delete.grid(row = 6, column = 3)
+        update = Button(self.window, text = 'Update Selected', width = 12, command = self.update_command)
+        update.grid(row = 5, column = 3)
 
-close = Button(window, text = 'Close', width = 12, command = window.destroy)
-close.grid(row = 7, column = 3)
+        delete = Button(self.window, text = 'Delete Selected', width = 12, command = self.delete_command)
+        delete.grid(row = 6, column = 3)
 
-#listbox, scrollbar
-lb = Listbox(window, height = 6, width = 36)
-lb.grid(row = 2, column = 0, rowspan = 6, columnspan = 2)
+        close = Button(self.window, text = 'Close', width = 12, command = self.window.destroy)
+        close.grid(row = 7, column = 3)
 
-sb = Scrollbar(window)
-sb.grid(row = 2, column = 2, rowspan = 6)
+        #listbox, scrollbar
+        self.lb = Listbox(self.window, height = 6, width = 36)
+        self.lb.grid(row = 2, column = 0, rowspan = 6, columnspan = 2)
 
-lb.configure(yscrollcommand = sb.set)
-sb.configure(command = lb.yview)
+        self.sb = Scrollbar(self.window)
+        self.sb.grid(row = 2, column = 2, rowspan = 6)
 
-lb.bind('<<ListboxSelect>>', get_selected_row)
+        self.lb.configure(yscrollcommand = self.sb.set)
+        self.sb.configure(command = self.lb.yview)
 
-#app runner
+        self.lb.bind('<<ListboxSelect>>', self.get_selected_row)
+
+    #functions
+    def refresh(self):
+        self.lb.delete(0, END)
+        self.view_command()
+
+    def get_selected_row(self, event): 
+        try:    
+            index = self.lb.curselection()[0]
+            self.selected = self.lb.get(index)
+            self.te.delete(0, END)
+            self.te.insert(END,  self.selected[1])
+            self.ae.delete(0, END)
+            self.ae.insert(END,  self.selected[2])
+            self.ye.delete(0, END)
+            self.ye.insert(END,  self.selected[3])
+            self.ie.delete(0, END)
+            self.ie.insert(END,  self.selected[4])
+        except:
+            self.te.delete(0, END)
+            self.te.delete(0, END)
+            self.te.delete(0, END)
+            self.te.delete(0, END)
+
+    def view_command(self):
+        self.lb.delete(0, END)
+        for row in database.view():
+            self.lb.insert(END, row)
+            
+    def search_command(self):
+        self.lb.delete(0, END)
+        for row in database.search(self.tval.get(), self.aval.get(), self.yval.get(), self.ival.get()):
+            self.lb.insert(END, row)
+
+    def add_command(self):
+        database.add(self.tval.get(), self.aval.get(), self.yval.get(), self.ival.get()) 
+        self.lb.insert(END, (self.tval.get(), self.aval.get(), self.yval.get(), self.ival.get()))
+        self.refresh()
+
+    def update_command(self):
+        database.update( self.selected[0], self.tval.get(), self.aval.get(), self.yval.get(), self.ival.get())
+        self.refresh()
+        
+    def delete_command(self):
+        database.delete( self.selected[0])
+        self.lb.delete(0, END)
+        self.te.delete(0, END)
+        self.ye.delete(0, END)
+        self.ae.delete(0, END)
+        self.ie.delete(0, END)
+        self.view_command()
+
+#instantiate and initialize window
+window = Tk()
+Window(window)
+
+#run window
 window.mainloop()
